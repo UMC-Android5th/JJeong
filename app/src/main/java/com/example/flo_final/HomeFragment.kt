@@ -13,10 +13,14 @@ import com.example.flo_final.HomeVPAdapter
 import com.example.flo_final.MainActivity
 import com.example.flo_final.R
 import com.example.flo_final.databinding.FragmentHomeBinding
+import me.relex.circleindicator.CircleIndicator3
 
 class HomeFragment : Fragment() {
 
     lateinit var binding: FragmentHomeBinding
+    lateinit var indicator3: CircleIndicator3
+    lateinit var viewPager2: ViewPager2
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,10 +34,10 @@ class HomeFragment : Fragment() {
         binding = FragmentHomeBinding.inflate(inflater, container, false)
 
 
-        binding.homePannelIndicator.setViewPager(binding.homePannelBackgroundIv)
-        binding.homeBannerIndicator.setViewPager(binding.homePannelViewpagerImg)
 
-        //binding.homePannelBackgroundIv.adapter!!.registerAdapterDataObserver(binding.homePannelIndicator.adapterDataObserver)
+        binding.homePannelIndicator.setViewPager(binding.homePannelBackgroundIv)
+        //binding.homeBannerIndicator.setViewPager(binding.homePannelViewpagerImg)
+
 
         val homeAdapter=HomeVPAdapter(this)
         binding.homePannelBackgroundIv.adapter=homeAdapter
@@ -41,8 +45,10 @@ class HomeFragment : Fragment() {
         binding.homePannelAlbumTodayImg1.setOnClickListener {
             (context as MainActivity).supportFragmentManager.beginTransaction().replace(R.id.main_frm,AlbumFragment()).commitAllowingStateLoss()
 
+
         }
 
+        
         val bannerAdapter = BannerVPAdapter(this)
         bannerAdapter.addFragment(BannerFragment(R.drawable.img_home_viewpager_exp))
         bannerAdapter.addFragment(BannerFragment(R.drawable.img_home_viewpager_exp2))
