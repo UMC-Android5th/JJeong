@@ -16,26 +16,23 @@ class SongActivity : AppCompatActivity(){
     private var mediaPlayer: MediaPlayer? = null
     private var gson: Gson = Gson()
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivitySongBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
-        initSong()
-        setPlayer(song)
-
         binding.songDownIb.setOnClickListener{
             finish()
         }
         binding.songMiniplayerIv.setOnClickListener{
-            setPlayerStatus(true)
-        }
-        binding.songPauseIv.setOnClickListener {
             setPlayerStatus(false)
         }
+        binding.songPauseIv.setOnClickListener {
+            setPlayerStatus(true)
+        }
         if (intent.hasExtra("title") && intent.hasExtra("singer")){
-            binding.songNameTxt.text=intent.getStringExtra("title")!!
-            binding.songSingerTxt.text=intent.getStringExtra("singer")!!
+            binding.songNameTxt.text=intent.getStringExtra("title")
+            binding.songSingerTxt.text=intent.getStringExtra("singer")
         }
     }
 
@@ -82,7 +79,24 @@ class SongActivity : AppCompatActivity(){
                 mediaPlayer?.pause()
             }
         }
+       
     }
+
+    //사용자가 포커스 잃었을때 음악 중지
+    override fun onPause() {
+        super.onPause()
+        setPlayerStatus(false)
+        song.second = ((binding.songProgressbarView.progress * song.playTime)/100)/1000
+        val sharedPreferences = getSharedPreferences("song", MODE_PRIVATE)
+        val editor = sharedPreferences.edit() // 에디터
+        val songJson = gson.toJson(song)
+        editor.putString("songData", songJson)
+
+        editor.apply()
+
+
+    }
+    
     private fun startTimer(){
         timer=Timer(song.playTime, song.isPlaying)
         timer.start()
@@ -116,21 +130,6 @@ class SongActivity : AppCompatActivity(){
             }
 
         }
-    }
-
-    //사용자가 포커스 잃었을때 음악 중지
-    override fun onPause() {
-        super.onPause()
-        setPlayerStatus(false)
-        song.second = ((binding.songProgressbarView.progress * song.playTime)/100)/1000
-        val sharedPreferences = getSharedPreferences("song", MODE_PRIVATE)
-        val editor = sharedPreferences.edit() // 에디터
-        val songJson = gson.toJson(song)
-        editor.putString("songData", songJson)
-
-        editor.apply()
-
-
     }
 
     override fun onDestroy() {

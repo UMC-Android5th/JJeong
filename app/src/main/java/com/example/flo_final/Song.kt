@@ -9,4 +9,5 @@ data class Song(
     var playTime : Int = 0,
     var isPlaying : Boolean = false,
     var music : String = ""
+
 )
