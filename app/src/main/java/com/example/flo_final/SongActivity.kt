@@ -173,7 +173,24 @@ class SongActivity : AppCompatActivity(){
                 mediaPlayer?.pause()
             }
         }
+       
     }
+
+    //사용자가 포커스 잃었을때 음악 중지
+    override fun onPause() {
+        super.onPause()
+        setPlayerStatus(false)
+        song.second = ((binding.songProgressbarView.progress * song.playTime)/100)/1000
+        val sharedPreferences = getSharedPreferences("song", MODE_PRIVATE)
+        val editor = sharedPreferences.edit() // 에디터
+        val songJson = gson.toJson(song)
+        editor.putString("songData", songJson)
+
+        editor.apply()
+
+
+    }
+    
     private fun startTimer(){
         timer=Timer(songs[nowPos].playTime, songs[nowPos].isPlaying)
         timer.start()
