@@ -42,7 +42,12 @@ class MainActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
-        /*Log.d("Song",song.title + song.singer)*/
+        Log.d("MAIN/JWT_TO_SERVER", getJwt().toString())
+    }
+
+    private fun getJwt():String?{
+        val spf = this.getSharedPreferences("auth2", AppCompatActivity.MODE_PRIVATE)
+        return spf!!.getString("jwt","")
     }
 
     override fun onStart() {
